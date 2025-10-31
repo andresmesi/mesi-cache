@@ -1,0 +1,95 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Mesi Cache 1.2.4\n"
+"Report-Msgid-Bugs-To: andres@mesi.com.ar\n"
+"POT-Creation-Date: 2025-10-25 00:00+0000\n"
+"PO-Revision-Date: 2025-10-25 00:00+0000\n"
+"Last-Translator: Andres Mesi <andres@mesi.com.ar>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: ChatGPT-GPT5\n"
+
+#: mesi-cache.php
+msgid "%s is missing or not writable. Please fix permissions or re-activate the plugin."
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Cache Management"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Regenerate Home"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Generate All"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Clear All Cache"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Apache Integration"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Generate / Update MESI-Cache Block"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Remove MESI-Cache Block"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Status Verifier"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Check Cache Status"
+msgstr ""
+
+#: admin/settings-page.php
+#, php-format
+msgid "Mesi Cache v%s — immediate feedback version."
+msgstr ""
+
+#: admin/settings-page.php
+#, php-format
+msgid "Generated %1$d items, %2$d errors"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Generate All function not found"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Cache cleared"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Could not clear cache (function missing)"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Could not write .htaccess"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "MESI-Cache block written to .htaccess"
+msgstr ""
+
+#: admin/settings-page.php
+msgid "Function not found"
+msgstr ""
+
+#: includes/htaccess-manager.php
+msgid "Could not write .htaccess file"
+msgstr ""
+
+#: includes/htaccess-manager.php
+msgid "Could not modify .htaccess"
+msgstr ""
