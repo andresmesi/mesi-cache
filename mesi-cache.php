@@ -47,14 +47,14 @@ if ( ! defined( 'MESI_CACHE_DIR' ) ) {
         require_once ABSPATH . 'wp-admin/includes/file.php'; // Load the helper definition when it has not been included yet.
     }
 
-    $home_path = function_exists( 'get_home_path' ) ? get_home_path() : ''; // Resolve the WordPress installation root via helper.
-    if ( '' === $home_path ) { // Provide a secondary fallback derived from the wp-content directory when the helper fails.
-        $home_path = dirname( wp_normalize_path( WP_CONTENT_DIR ) ); // WP_CONTENT_DIR lives directly inside the installation root.
+    $mesi_cache_home_path = function_exists( 'get_home_path' ) ? get_home_path() : ''; // Resolve the WordPress installation root via helper.
+    if ( '' === $mesi_cache_home_path ) { // Provide a secondary fallback derived from the wp-content directory when the helper fails.
+        $mesi_cache_home_path = dirname( wp_normalize_path( WP_CONTENT_DIR ) ); // WP_CONTENT_DIR lives directly inside the installation root.
     }
 
-    $resolved = wp_normalize_path( untrailingslashit( $home_path ) ); // Normalize separators and trim trailing slashes for consistency.
+    $mesi_cache_resolved = wp_normalize_path( untrailingslashit( $mesi_cache_home_path ) ); // Normalize separators and trim trailing slashes for consistency.
 
-    define( 'MESI_CACHE_DIR', trailingslashit( $resolved ) . 'wp-content/uploads/mesi-cache/' ); // Define the absolute cache directory path beside wp-config.php.
+    define( 'MESI_CACHE_DIR', trailingslashit( $mesi_cache_resolved ) . 'wp-content/uploads/mesi-cache/' ); // Define the absolute cache directory path beside wp-config.php.
 }
 
 /**
