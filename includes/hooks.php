@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * ============================================================================
  */
 add_action( 'init', function() {
-    if ( is_admin() ) {
-        return; // Skip serving cached files within the admin dashboard.
+    if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ( function_exists( 'wp_doing_cron' ) && wp_doing_cron() ) ) {
+        return; // Skip serving cached files within admin, REST, AJAX, or cron contexts.
     }
 
     $method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : 'GET'; // Determine the HTTP verb safely with a fallback.
@@ -41,7 +41,9 @@ add_action( 'init', function() {
         ? mesi_cache_file_for_home()
         : mesi_cache_file_for_path( $relative ); // Resolve the absolute path to the cached file that matches the request.
 
-    if ( file_exists( $file ) && is_readable( $file ) ) {
+    $needs_home_refresh = ( $relative === '' || $relative === 'index.php' ) && get_transient( 'mesi_cache_home_pending' ); // Do not serve stale home cache flagged for regeneration.
+
+    if ( ! $needs_home_refresh && file_exists( $file ) && is_readable( $file ) ) {
         header( 'X-MESI-Cache: HIT' ); // Advertise the cache hit via a custom response header.
         mesi_cache_send_headers(); // Emit the configured cache headers for downstream caches.
         if ( mesi_cache_stream_file( $file ) ) { // Stream the cached HTML to the browser using PHP's native file streaming.
@@ -56,8 +58,8 @@ add_action( 'init', function() {
  * ============================================================================
  */
 add_action( 'template_redirect', function() {
-    if ( is_admin() ) {
-        return; // Do not start output buffering for admin requests.
+    if ( is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ( function_exists( 'wp_doing_cron' ) && wp_doing_cron() ) ) {
+        return; // Do not start output buffering for admin, REST, AJAX, or cron requests.
     }
 
     $method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : 'GET'; // Determine the current HTTP verb safely.
@@ -74,6 +76,7 @@ add_action( 'template_redirect', function() {
         return; // Avoid caching personalized content for logged-in editors.
     }
 
+    // WP 6.9 hardened internal HTTP handling; capturing live template output is required to mirror real responses reliably.
     ob_start( function( $html ) {
         if ( ! is_string( $html ) || strlen( $html ) < 128 ) {
             return $html; // Ignore responses that are not meaningful HTML documents.
@@ -115,6 +118,11 @@ add_action( 'template_redirect', function() {
         $cache_file    = ( '/' === $relative_path ) ? mesi_cache_file_for_home() : mesi_cache_file_for_path( $relative_path ); // Resolve the cache file based on the relative path.
 
         mesi_cache_write_file( $cache_file, $html ); // Persist the freshly generated HTML into the cache store.
+
+        if ( '/' === $relative_path ) {
+            delete_transient( 'mesi_cache_home_pending' ); // Clear the regeneration flag once the homepage has been refreshed.
+        }
+
         header( 'X-MESI-Cache: MISS -> STORED' ); // Expose a debugging header indicating the cache has been populated.
         return $html; // Return the original buffer so the response continues normally.
     } );
@@ -142,6 +150,7 @@ add_action( 'save_post', function( $post_id, $post, $update ) {
     if ( file_exists( $home_file ) ) {
         wp_delete_file( $home_file ); // Remove the home cache whenever content changes.
     }
+    set_transient( 'mesi_cache_home_pending', 1, HOUR_IN_SECONDS ); // Flag the homepage for regeneration on the next visit without relying on wp_remote_get().
 
     if ( get_post_type( $post_id ) === 'post' ) {
         $categories = get_the_category( $post_id ); // Fetch all categories assigned to the post.
