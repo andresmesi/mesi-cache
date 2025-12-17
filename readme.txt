@@ -2,9 +2,9 @@
 Contributors: andresmesi
 Tags: cache, performance, static, html, apache
 Requires at least: 5.5
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.4
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,10 @@ or delete `wp-content/uploads/mesi-cache/`.
 It is optimized for Apache `.htaccess`. Nginx rules can be written manually.
 
 == Changelog ==
+
+= 1.2.5 =
+* Ensure cache generation uses live template output for WordPress 6.9.
+* Preserve existing cache paths while improving homepage regeneration.
 
 = 1.2.4 =
 * Added tag and author cache invalidation.
